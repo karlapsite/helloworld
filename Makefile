@@ -1,6 +1,8 @@
 CFLAGS = -g -Wall -Wextra -Werror -std=c99
 LDFLAGS =
-EXENAME = hello 
+EXENAME = hello
+
+HOST = $(USER)@localhost
 
 SOURCEDIR = src
 BUILDDIR = build
@@ -18,6 +20,9 @@ $(BUILDDIR)/%.o: $(SOURCEDIR)/%.c
 $(BINDIR)/$(EXENAME): $(OBJS)
 	@mkdir -p $(dir $@)
 	$(CC) -o $@ $^ $(LDFLAGS)
+
+install:
+	cat $(BINDIR)/$(EXENAME) | ssh $(HOST) 'cat >> $(EXENAME)'
 
 clean:
 	rm -rf $(BINDIR)/$(EXENAME) $(BUILDDIR)/
