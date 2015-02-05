@@ -23,6 +23,7 @@ $(BINDIR)/$(EXENAME): $(OBJS)
 
 install:
 	cat $(BINDIR)/$(EXENAME) | ssh $(HOST) 'cat >> $(EXENAME)'
+	ssh $(HOST) 'chmod +x $(EXENAME)'
 
 clean:
 	rm -rf $(BINDIR)/$(EXENAME) $(BUILDDIR)/
