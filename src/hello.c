@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+/* This is a hello world program */
 int main(int argc, char *argv[])
 {
     printf("Hello world\n");
