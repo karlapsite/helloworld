@@ -1,35 +1,23 @@
-ifndef CROSS_CC_PREFIX
-  CROSS_CC_PREFIX=$(CROSS_COMPILE)
-endif
+CFLAGS := -g -Wall -Werror -std=c99
+LIBS :=
+PROGRAM := prgm
 
-CC=$(CROSS_CC_PREFIX)gcc
-LD=$(CROSS_CC_PREFIX)ld
-RANLIB=$(CROSS_CC_PREFIX)corelib
-CFLAGS = -g -Wall -Wextra -Werror -std=c99
-PROGRAM = hello
-
-HOST = $(USER)@localhost
-
-SOURCEDIR = src
-BUILDDIR = build
+SRCDIR = src
+BLDDIR = build
 BINDIR = bin
 
-SRCS = $(wildcard $(SOURCEDIR)/*.c)
-OBJS = $(patsubst $(SOURCEDIR)%.c,$(BUILDDIR)%.o, $(SRCS))
+SRCS = $(wildcard $(SRCDIR)/*.c)
+OBJS = $(patsubst $(SRCDIR)%.c,$(BLDDIR)%.o, $(SRCS))
 
 all: $(BINDIR)/$(PROGRAM)
 
-$(BUILDDIR)/%.o: $(SOURCEDIR)/%.c
+$(BLDDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) -c -o $@ $^ $(CFLAGS)
 
 $(BINDIR)/$(PROGRAM): $(OBJS)
 	@mkdir -p $(dir $@)
-	$(CC) -o $@ $^ $(LDFLAGS)
-
-install:
-	cat $(BINDIR)/$(PROGRAM) | ssh $(HOST) 'cat >> $(EXENAME)'
-	ssh $(HOST) 'chmod +x $(PROGRAM)'
+	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 clean:
-	rm -rf $(BINDIR)/$(PROGRAM) $(BUILDDIR)/
+	rm -rf $(BINDIR)/$(PROGRAM) $(BLDDIR)/
